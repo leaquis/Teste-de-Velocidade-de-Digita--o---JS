@@ -20,6 +20,10 @@ function novoTexto() {
 
 function atualizarTeste() {
     iniciar();
+
+    if (entrada.value === texto.textContent) {
+        verificar();
+    }
 }
 
 function iniciar() {
@@ -29,6 +33,28 @@ function iniciar() {
         localStorage.setItem("tempoInicial", new Date().getTime());
         localStorage.setItem("testeEmAndamento", true);
     }
+}
+
+function verificar() {
+    const tempoFinal = new Date().getTime()
+    const tempoInicial = parseInt(localStorage.getItem("tempoInicial"))
+    const tempoGasto = (tempoFinal - tempoInicial) / 1000;
+
+    resultado.textContent = `Parabéns! Você levou ${tempoGasto} segundos!`
+
+    adicionarAoHistorico(texto.textContent, tempoGasto);
+
+    localStorage.setItem("testeEmAndamento", false)
+    entrada.value = ""
+    novoTexto();
+}
+
+function adicionarAoHistorico(textoDigitado, tempoGasto) {
+    const itemHistorico = document.createElement("p")
+
+    itemHistorico.textContent = `Texto "${textoDigitado}" - Tempo: ${tempoGasto} em segundos`
+
+    historico.appendChild(itemHistorico);
 }
 
 entrada.addEventListener("keyup", atualizarTeste);
